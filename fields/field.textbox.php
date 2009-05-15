@@ -8,6 +8,7 @@
 		const DISABLE_PROPOGATION = 1;
 		
 		protected $_sizes = array();
+		protected $_driver = null;
 		
 	/*-------------------------------------------------------------------------
 		Definition:
@@ -18,6 +19,7 @@
 			
 			$this->_name = 'Text Box';
 			$this->_required = true;
+			$this->_driver = $this->_engine->ExtensionManager->create('textboxfield');
 			
 			// Set defaults:
 			$this->set('show_column', 'yes');
@@ -173,7 +175,7 @@
 	-------------------------------------------------------------------------*/
 		
 		public function displayPublishPanel(&$wrapper, $data = null, $error = null, $prefix = null, $postfix = null) {
-			$this->_engine->Page->addStylesheetToHead(URL . '/extensions/textboxfield/assets/publish.css', 'screen', 8251840);
+			$this->_driver->addHeaders($this->_engine->Page);
 			
 			$sortorder = $this->get('sortorder');
 			$element_name = $this->get('element_name');

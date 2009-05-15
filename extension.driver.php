@@ -42,6 +42,20 @@
 			
 			return true;
 		}
+		
+	/*-------------------------------------------------------------------------
+		Utilites:
+	-------------------------------------------------------------------------*/
+		
+		protected $addedHeaders = false;
+		
+		public function addHeaders($page) {
+			if (!$this->addedHeaders) {
+				$page->addStylesheetToHead(URL . '/extensions/textboxfield/assets/publish.css', 'screen', 10251840);
+				
+				$this->addedHeaders = true;
+			}
+		}
 	}
 	
 ?>
