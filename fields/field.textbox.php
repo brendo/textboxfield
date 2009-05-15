@@ -190,7 +190,7 @@
 			// Input box:
 			if ($this->get('size') == 'single') {
 				$input = Widget::Input(
-					"fields{$prefix}[$element_name]{$postfix}", $data['value']
+					"fields{$prefix}[$element_name]{$postfix}", General::sanitize($data['value'])
 				);
 				
 			// Text Box:
