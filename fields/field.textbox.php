@@ -5,6 +5,8 @@
 	require_once(TOOLKIT . '/class.xsltprocess.php');
 	
 	class FieldTextBox extends Field {
+		const DISABLE_PROPOGATION = 1;
+		
 		protected $_sizes = array();
 		
 	/*-------------------------------------------------------------------------
@@ -78,10 +80,16 @@
 		Settings:
 	-------------------------------------------------------------------------*/
 		
-		public function displaySettingsPanel(&$wrapper, $errors = null) {
+		public function displaySettingsPanel(&$wrapper, $errors = null, $append_before = null, $append_after = null) {
 			parent::displaySettingsPanel($wrapper, $errors);
 			
 			$order = $this->get('sortorder');
+			
+		/*---------------------------------------------------------------------
+			Append before
+		---------------------------------------------------------------------*/
+			
+			if (!is_null($append_before)) $wrapper->appendChild($append_before);
 			
 		/*---------------------------------------------------------------------
 			Expression
@@ -122,12 +130,20 @@
 				$wrapper, $this->get('validator'), "fields[{$order}][validator]"
 			);
 			
+		/*---------------------------------------------------------------------
+			Append after
+		---------------------------------------------------------------------*/
+			
+			if (!is_null($append_after)) $wrapper->appendChild($append_after);
+			
 			$this->appendRequiredCheckbox($wrapper);
 			$this->appendShowColumnCheckbox($wrapper);
 		}
 		
-		public function commit() {
+		public function commit($propogate = null) {
 			if (!parent::commit()) return false;
+			
+			if ($propogate == self::DISABLE_PROPOGATION) return true;
 			
 			$id = $this->get('id');
 			$handle = $this->handle();
