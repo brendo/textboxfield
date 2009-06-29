@@ -323,7 +323,7 @@
 			
 			return parent::prepareTableValue(
 				array(
-					'value'		=> General::sanitize($data['value'])
+					'value'		=> General::sanitize(strip_tags($data['value']))
 				), $link
 			);
 		}
