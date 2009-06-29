@@ -10,8 +10,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.0.3',
-				'release-date'	=> '2009-05-15',
+				'version'		=> '2.0.4',
+				'release-date'	=> '2009-06-29',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
 					'website'		=> 'http://pixelcarnage.com/',
