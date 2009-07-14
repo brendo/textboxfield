@@ -302,9 +302,25 @@
 		Output:
 	-------------------------------------------------------------------------*/
 		
-		public function appendFormattedElement(&$wrapper, $data, $encode = false) {
-			$value = trim($data['value_formatted']);
+		public function fetchIncludableElements() {
+			return array(
+				$this->get('element_name'),
+				$this->get('element_name') . ': raw'
+			);
+		}
+		
+		public function appendFormattedElement(&$wrapper, $data, $encode = false, $mode = null) {
+			if ($mode == 'raw') {
+				$value = trim($data['value']);
+			}
+			
+			else {
+				$mode = 'normal';
+				$value = trim($data['value_formatted']);
+			}
+			
 			$attributes = array(
+				'mode'			=> $mode,
 				'handle'		=> $data['handle'],
 				'word-count'	=> $data['word_count']
 			);
