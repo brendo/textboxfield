@@ -193,11 +193,22 @@
 					"fields{$prefix}[$element_name]{$postfix}", General::sanitize($data['value'])
 				);
 				
+				###
+				# Delegate: ModifyTextBoxInlineFieldPublishWidget
+				# Description: Allows developers modify the textbox before it is rendered in the publish forms
+				$delegate = 'ModifyTextBoxInlineFieldPublishWidget';
+			}
+			
 			// Text Box:
-			} else {
+			else {
 				$input = Widget::Textarea(
 					"fields{$prefix}[$element_name]{$postfix}", '20', '50', General::sanitize($data['value'])
 				);
+				
+				###
+				# Delegate: ModifyTextBoxFullFieldPublishWidget
+				# Description: Allows developers modify the textbox before it is rendered in the publish forms
+				$delegate = 'ModifyTextBoxFullFieldPublishWidget';
 			}
 			
 			// Add classes:
@@ -208,6 +219,16 @@
 			}
 			
 			$input->setAttribute('class', implode(' ', $classes));
+			
+			$this->_engine->ExtensionManager->notifyMembers(
+				$delegate, '/backend/',
+				array(
+					'field'		=> &$this,
+					'label'		=> &$label,
+					'textarea'	=> &$input
+				)
+			);
+			
 			$label->appendChild($input);
 			
 			if ($error != null) {
