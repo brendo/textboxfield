@@ -10,7 +10,7 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.0.6',
+				'version'		=> '2.0.7',
 				'release-date'	=> '2009-07-24',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
