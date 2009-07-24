@@ -3,9 +3,9 @@ Field: Text Box
 
 An enhanced replacement for the default Text Input and Textarea fields.
 
-Version: 2.0.4
-Author: Rowan Lewis <rowan@pixelcarnage.com>
-Build Date: 29 June 2009
+Version: 2.0.6
+Author: Rowan Lewis <me@rowanlewis.com>
+Build Date: 24 July 2009
 Requirements: Symphony 2.0.1
 
 

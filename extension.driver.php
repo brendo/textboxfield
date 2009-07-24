@@ -10,12 +10,12 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.0.4',
-				'release-date'	=> '2009-06-29',
+				'version'		=> '2.0.6',
+				'release-date'	=> '2009-07-24',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
-					'website'		=> 'http://pixelcarnage.com/',
-					'email'			=> 'rowan@pixelcarnage.com'
+					'website'		=> 'http://rowanlewis.com/',
+					'email'			=> 'me@rowanlewis.com'
 				),
 				'description' => '
 					An enhanced text input field.
