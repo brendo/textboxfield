@@ -396,7 +396,7 @@
 			));	
 			$wrapper->appendChild($label);
 			
-			$list = new XMLElement('ol');
+			$list = new XMLElement('ul');
 			
 			$filters = array(
 				array(

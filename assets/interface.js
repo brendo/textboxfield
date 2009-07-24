@@ -11,7 +11,7 @@
 		var settings = {
 			input:			'> label > input',
 			help:			'> p',
-			filters:		'> ol > li'
+			filters:		'> ul > li'
 		};
 		
 		jQuery.extend(settings, custom_settings);
@@ -126,7 +126,7 @@
 			};
 			
 			// Initialize objects:
-			widgets.container = object;
+			widgets.container = object.addClass('initialised');
 			widgets.input = object.find(settings.input);
 			widgets.input.keyup(methods.refresh);
 			
