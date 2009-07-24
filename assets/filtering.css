@@ -4,6 +4,9 @@
 	margin: -1em 0 1.5em 0;
 	overflow: hidden;
 }
+.field-textbox.selected ol {
+	color: #aabbee;
+}
 .field-textbox ol li {
 	cursor: pointer;
 	float: left;
@@ -13,12 +16,22 @@
 	background: transparent;
 	color: #444433;
 }
+.field-textbox.selected ol li:hover,
+.field-textbox.selected ol li.selected {
+	color: #ffffff;
+}
 .field-textbox ol li:before {
 	color: #888877;
 	content: ', ';
 }
+.field-textbox.selected ol li:before {
+	color: #aabbee;
+}
 .field-textbox ol li:first-child:before {
 	content: '';
+}
+.field-textbox.selected p {
+	color: #aabbee;
 }
 .field-textbox p code {
 	font-size: 120%;
