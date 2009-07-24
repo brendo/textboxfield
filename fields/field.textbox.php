@@ -374,6 +374,7 @@
 	-------------------------------------------------------------------------*/
 		
 		public function displayDatasourceFilterPanel(&$wrapper, $data = null, $errors = null, $prefix = null, $postfix = null) {
+			$this->_driver->addFilteringHeaders($this->_engine->Page);
 			$field_id = $this->get('id');
 			
 			$wrapper->appendChild(new XMLElement(
@@ -383,6 +384,7 @@
 					$this->name()
 				)
 			));
+			$wrapper->setAttribute('class', $wrapper->getAttribute('class') . ' field-textbox');
 			
 			$prefix = ($prefix ? "[{$prefix}]" : '');
 			$postfix = ($postfix ? "[{$postfix}]" : '');
@@ -394,11 +396,27 @@
 			));	
 			$wrapper->appendChild($label);
 			
-			$help = new XMLElement('p');
-			$help->setAttribute('class', 'help');
-			$help->setValue(__('Accepted filter methods: <code>regexp</code>, <code>not-regexp</code>, <code>boolean</code> and <code>not-boolean</code>.'));
+			$list = new XMLElement('ol');
+			$filters = array(
+				'boolean:'			=> 'boolean',
+				'not-boolean:'		=> 'not-boolean',
+				'regexp:'			=> 'regexp',
+				'not-regexp:'		=> 'not-regexp',
+				'contains:'			=> 'contains',
+				'not-contains:'		=> 'not-contains',
+				'starts-with:'		=> 'starts-with',
+				'not-starts-with:'	=> 'not-starts-with',
+				'ends-with:'		=> 'ends-with',
+				'not-ends-with:'	=> 'not-ends-with'
+			);
 			
-			$wrapper->appendChild($help);
+			foreach ($filters as $title => $value) {
+				$item = new XMLElement('li', $value);
+				$item->setAttribute('title', $title);
+				$list->appendChild($item);
+			}
+			
+			$wrapper->appendChild($list);
 		}
 		
 		public function buildDSRetrivalSQL($data, &$joins, &$where, $andOperation = false) {

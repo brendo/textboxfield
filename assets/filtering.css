@@ -1,0 +1,22 @@
+.field-textbox ol {
+	color: #888877;
+	list-style: none;
+	margin: -1em 0 1.5em 0;
+	overflow: hidden;
+}
+.field-textbox ol li {
+	cursor: pointer;
+	display: inline;
+}
+.field-textbox ol li:hover,
+.field-textbox ol li.selected {
+	background: transparent;
+	color: #444433;
+}
+.field-textbox ol li:after {
+	color: #888877;
+	content: ',';
+}
+.field-textbox ol li:last-child:after {
+	content: '';
+}

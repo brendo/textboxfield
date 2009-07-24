@@ -48,12 +48,23 @@
 	-------------------------------------------------------------------------*/
 		
 		protected $addedHeaders = false;
+		protected $addedFilteringHeaders = false;
 		
 		public function addHeaders($page) {
 			if (!$this->addedHeaders) {
 				$page->addStylesheetToHead(URL . '/extensions/textboxfield/assets/publish.css', 'screen', 10251840);
 				
 				$this->addedHeaders = true;
+			}
+		}
+		
+		public function addFilteringHeaders($page) {
+			if (!$this->addedFilteringHeaders) {
+				$page->addScriptToHead(URL . '/extensions/textboxfield/assets/interface.js', 10251840);
+				$page->addScriptToHead(URL . '/extensions/textboxfield/assets/filtering.js', 10251841);
+				$page->addStylesheetToHead(URL . '/extensions/textboxfield/assets/filtering.css', 'screen', 10251840);
+				
+				$this->addedFilteringHeaders = true;
 			}
 		}
 	}
