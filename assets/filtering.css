@@ -6,17 +6,20 @@
 }
 .field-textbox ol li {
 	cursor: pointer;
-	display: inline;
+	float: left;
 }
 .field-textbox ol li:hover,
 .field-textbox ol li.selected {
 	background: transparent;
 	color: #444433;
 }
-.field-textbox ol li:after {
+.field-textbox ol li:before {
 	color: #888877;
-	content: ',';
+	content: ', ';
 }
-.field-textbox ol li:last-child:after {
+.field-textbox ol li:first-child:before {
 	content: '';
+}
+.field-textbox p code {
+	font-size: 120%;
 }

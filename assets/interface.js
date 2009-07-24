@@ -10,6 +10,7 @@
 		var objects = jQuery(this);
 		var settings = {
 			input:			'> label > input',
+			help:			'> p',
 			filters:		'> ol > li'
 		};
 		
@@ -21,10 +22,11 @@
 		
 		objects = objects.map(function() {
 			var object = jQuery(this);
-			var templates = [];
+			var message = '';
 			var widgets = {
 				container:	 	null,
 				input:	 		null,
+				help:	 		null,
 				filters:		null
 			};
 			var methods = {
@@ -42,7 +44,6 @@
 						var matched = match.exec(value)[0];
 						
 						value = value.replace(match, '');
-						filter.removeClass('selected');
 						
 						if (selection_start < matched.length) {
 							selection_track = false;
@@ -75,7 +76,6 @@
 						});
 						
 						value = filter.attr('title') + ' ' + value;
-						filter.addClass('selected');
 						
 						if (selection_track) {
 							selection_start = selection_start + filter.attr('title').length + 1;
@@ -87,30 +87,39 @@
 					if (selection_track) {
 						input.selectionStart = selection_start;
 						input.selectionEnd = selection_start + selection_diff;
-						
-					} else {
+					}
+					
+					else {
 						input.selectionStart = 0;
 						input.selectionEnd = 0;
 					}
+					
+					methods.refresh();
 					
 					return false;
 				},
 				
 				refresh:		function() {
 					var value = widgets.input.val();
+					var matched = false;
 					
 					widgets.filters.each(function() {
 						var filter = jQuery(this);
 						var match = new RegExp('^' + filter.attr('title') + '\\s*');
 						
 						if (match.test(value)) {
+							matched = true;
+							
 							filter.addClass('selected');
+							widgets.help.html(filter.attr('alt'));
 						}
 						
 						else {
 							filter.removeClass('selected');
 						}
 					});
+					
+					if (!matched) widgets.help.html(message);
 				},
 				
 				silence:		function() { return false; }
@@ -120,6 +129,10 @@
 			widgets.container = object;
 			widgets.input = object.find(settings.input);
 			widgets.input.keyup(methods.refresh);
+			
+			// Has help?
+			widgets.help = object.find(settings.help);
+			message = widgets.help.html();
 			
 			// Has filters?
 			widgets.filters = object.find(settings.filters);
