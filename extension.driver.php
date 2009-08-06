@@ -10,16 +10,14 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.0.7',
-				'release-date'	=> '2009-07-24',
+				'version'		=> '2.0.8',
+				'release-date'	=> '2009-08-06',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
 					'website'		=> 'http://rowanlewis.com/',
 					'email'			=> 'me@rowanlewis.com'
 				),
-				'description' => '
-					An enhanced text input field.
-				'
+				'description' => 'An enhanced text input field.'
 			);
 		}
 		
@@ -51,7 +49,7 @@
 		protected $addedFilteringHeaders = false;
 		
 		public function addHeaders($page) {
-			if (!$this->addedHeaders) {
+			if ($page and !$this->addedHeaders) {
 				$page->addStylesheetToHead(URL . '/extensions/textboxfield/assets/publish.css', 'screen', 10251840);
 				
 				$this->addedHeaders = true;
@@ -59,7 +57,7 @@
 		}
 		
 		public function addFilteringHeaders($page) {
-			if (!$this->addedFilteringHeaders) {
+			if ($page and !$this->addedFilteringHeaders) {
 				$page->addScriptToHead(URL . '/extensions/textboxfield/assets/interface.js', 10251840);
 				$page->addScriptToHead(URL . '/extensions/textboxfield/assets/filtering.js', 10251841);
 				$page->addStylesheetToHead(URL . '/extensions/textboxfield/assets/filtering.css', 'screen', 10251840);
