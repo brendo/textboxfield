@@ -494,8 +494,9 @@
 						OR t{$field_id}_{$this->_key}.value REGEXP '{$data}'
 					)
 				";
-				
-			} else if (preg_match('/^(not-)?boolean:\s*/', $data[0], $matches)) {
+			}
+			
+			else if (preg_match('/^(not-)?boolean:\s*/', $data[0], $matches)) {
 				$data = trim(array_pop(explode(':', implode(' + ', $data), 2)));
 				$negate = ($matches[1] == '' ? '' : 'NOT');
 				
@@ -526,8 +527,9 @@
 				$where .= "
 					AND {$negate}(MATCH (t{$field_id}_{$this->_key}.value) AGAINST ('{$data}' IN BOOLEAN MODE))
 				";
-				
-			} else if (preg_match('/^(not-)?((starts|ends)-with|contains):\s*/', $data[0], $matches)) {
+			}
+			
+			else if (preg_match('/^(not-)?((starts|ends)-with|contains):\s*/', $data[0], $matches)) {
 				$data = trim(array_pop(explode(':', $data[0], 2)));
 				$negate = ($matches[1] == '' ? '' : 'NOT');
 				$data = $this->cleanValue($data);
@@ -548,8 +550,9 @@
 						OR t{$field_id}_{$this->_key}.value LIKE '{$data}'
 					)
 				";
-				
-			} else if ($andOperation) {
+			}
+			
+			else if ($andOperation) {
 				foreach ($data as $value) {
 					$this->_key++;
 					$value = $this->cleanValue($value);
@@ -565,8 +568,9 @@
 						)
 					";
 				}
-				
-			} else {
+			}
+			
+			else {
 				if (!is_array($data)) $data = array($data);
 				
 				foreach ($data as &$value) {
