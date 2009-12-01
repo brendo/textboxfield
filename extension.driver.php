@@ -10,8 +10,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.0.8',
-				'release-date'	=> '2009-08-06',
+				'version'		=> '2.0.9',
+				'release-date'	=> '2009-12-01',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
 					'website'		=> 'http://rowanlewis.com/',
@@ -41,18 +41,41 @@
 			return true;
 		}
 		
+		public function update($previousVersion) {
+			if (version_compare($previousVersion, '2.0.9', '<')) {
+				$this->_Parent->Database->query("
+					ALTER TABLE
+						`tbl_fields_textbox`
+					ADD COLUMN
+						`length` INT(11) UNSIGNED DEFAULT NULL
+				");
+			}
+			
+			return true;
+		}
+		
 	/*-------------------------------------------------------------------------
 		Utilites:
 	-------------------------------------------------------------------------*/
 		
-		protected $addedHeaders = false;
+		protected $addedPublishHeaders = false;
+		protected $addedSettingsHeaders = false;
 		protected $addedFilteringHeaders = false;
 		
-		public function addHeaders($page) {
-			if ($page and !$this->addedHeaders) {
+		public function addPublishHeaders($page) {
+			if ($page and !$this->addedPublishHeaders) {
 				$page->addStylesheetToHead(URL . '/extensions/textboxfield/assets/publish.css', 'screen', 10251840);
+				$page->addScriptToHead(URL . '/extensions/textboxfield/assets/publish.js', 10251840);
 				
-				$this->addedHeaders = true;
+				$this->addedPublishHeaders = true;
+			}
+		}
+		
+		public function addSettingsHeaders($page) {
+			if ($page and !$this->addedSettingsHeaders) {
+				$page->addStylesheetToHead(URL . '/extensions/textboxfield/assets/settings.css', 'screen', 10251840);
+				
+				$this->addedSettingsHeaders = true;
 			}
 		}
 		

@@ -83,6 +83,8 @@
 	-------------------------------------------------------------------------*/
 		
 		public function displaySettingsPanel(&$wrapper, $errors = null, $append_before = null, $append_after = null) {
+			$this->_driver->addSettingsHeaders($this->_engine->Page);
+			
 			parent::displaySettingsPanel($wrapper, $errors);
 			
 			$order = $this->get('sortorder');
@@ -128,9 +130,27 @@
 			Validator
 		---------------------------------------------------------------------*/
 			
+			$group = new XMLElement('div');
+			$group->setAttribute('class', 'group');
+			
+			$div = new XMLElement('div');
 			$this->buildValidationSelect(
-				$wrapper, $this->get('validator'), "fields[{$order}][validator]"
+				$div, $this->get('validator'), "fields[{$order}][validator]"
 			);
+			$group->appendChild($div);
+			
+		/*---------------------------------------------------------------------
+			Limiting
+		---------------------------------------------------------------------*/
+			
+			$label = Widget::Label(__('Maximum Length'));
+			$input = Widget::Input(
+				"fields[{$order}][length]",
+				(integer)$this->get('length')
+			);
+			$label->appendChild($input);
+			$group->appendChild($label);
+			$wrapper->appendChild($group);
 			
 		/*---------------------------------------------------------------------
 			Append after
@@ -156,7 +176,12 @@
 				'field_id'			=> $id,
 				'formatter'			=> $this->get('formatter'),
 				'size'				=> $this->get('size'),
-				'validator'			=> $this->get('validator')
+				'validator'			=> $this->get('validator'),
+				'length'			=> (
+					(integer)$this->get('length') > 0
+					? $this->get('length')
+					: 0
+				)
 			);
 			
 			$this->Database->query("
@@ -175,16 +200,31 @@
 	-------------------------------------------------------------------------*/
 		
 		public function displayPublishPanel(&$wrapper, $data = null, $error = null, $prefix = null, $postfix = null) {
-			$this->_driver->addHeaders($this->_engine->Page);
+			$this->_driver->addPublishHeaders($this->_engine->Page);
 			
 			$sortorder = $this->get('sortorder');
 			$element_name = $this->get('element_name');
 			$classes = array();
 			
 			$label = Widget::Label($this->get('label'));
+			$optional = '';
 			
 			if ($this->get('required') != 'yes') {
-				$label->appendChild(new XMLElement('i', __('Optional')));
+				if ((integer)$this->get('length') > 0) {
+					$optional = __('$1 of $2 remaining &ndash; Optional');
+				}
+				
+				else {
+					$optional = __('Optional');
+				}
+			}
+			
+			else if ((integer)$this->get('length') > 0) {
+				$optional = __('$1 of $2 remaining');
+			}
+			
+			if ($optional) {
+				$label->appendChild(new XMLElement('i', $optional));
 			}
 			
 			// Input box:
@@ -219,6 +259,7 @@
 			}
 			
 			$input->setAttribute('class', implode(' ', $classes));
+			$input->setAttribute('length', (integer)$this->get('length'));
 			
 			$this->_engine->ExtensionManager->notifyMembers(
 				$delegate, '/backend/',
@@ -246,8 +287,9 @@
 			if ($this->get('formatter') != 'none') {
 				if (isset($this->_ParentCatalogue['entrymanager'])) {
 					$tfm = $this->_ParentCatalogue['entrymanager']->formatterManager;
-					
-				} else {
+				}
+				
+				else {
 					$tfm = new TextformatterManager($this->_engine);
 				}
 				
@@ -268,6 +310,7 @@
 		}
 		
 		public function checkPostFieldData($data, &$message, $entry_id = null) {
+			$length = (integer)$this->get('length');
 			$message = null;
 			
 			if ($this->get('required') == 'yes' and strlen(trim($data)) == 0) {
@@ -286,6 +329,17 @@
 				$message = __(
 					"'%s' contains invalid data. Please check the contents.", array(
 						$this->get('label')
+					)
+				);
+				
+				return self::__INVALID_FIELDS__;	
+			}
+			
+			if ($length > 0 and $length < strlen($data)) {
+				$message = __(
+					"'%s' must be no longer than %s characters.", array(
+						$this->get('label'),
+						$length
 					)
 				);
 				

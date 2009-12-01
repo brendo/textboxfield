@@ -1,0 +1,17 @@
+.field-textbox-limit {
+	margin-bottom: 1.75em;
+}
+.field-textbox-limit label {
+	margin-bottom: 0;
+}
+.field-textbox-limit input[type=text] {
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	display: block;
+	font-family: inherit;
+	font-size: 109.09%;
+	margin-top: 2px;
+	padding: 2px;
+	width: 100%;
+}

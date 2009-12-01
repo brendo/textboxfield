@@ -10,3 +10,6 @@
 .field-textbox .size-huge {
 	height: 50em;
 }
+.field-textbox i.invalid {
+	color: #d42;
+}
