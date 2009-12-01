@@ -9,9 +9,9 @@
 		
 		var objects = jQuery(this);
 		var settings = {
-			input:			'> label > input',
-			help:			'> p',
-			filters:		'> ul > li'
+			input:			'> label > input, > .content > label > input',
+			help:			'> p, > .content > p',
+			filters:		'> ul > li, > .content > ul > li'
 		};
 		
 		jQuery.extend(settings, custom_settings);

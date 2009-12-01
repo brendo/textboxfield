@@ -33,6 +33,9 @@
 .field-textbox.selected p {
 	color: #aabbee;
 }
-.field-textbox p code {
+.subsection .field-textbox p code {
 	font-size: 120%;
+}
+.duplicator .field-textbox p code {
+	font-size: 100%;
 }
