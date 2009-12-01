@@ -10,7 +10,7 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.0.9',
+				'version'		=> '2.0.10',
 				'release-date'	=> '2009-12-01',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
@@ -42,13 +42,17 @@
 		}
 		
 		public function update($previousVersion) {
-			if (version_compare($previousVersion, '2.0.9', '<')) {
+			try {
 				$this->_Parent->Database->query("
 					ALTER TABLE
 						`tbl_fields_textbox`
 					ADD COLUMN
 						`length` INT(11) UNSIGNED DEFAULT NULL
 				");
+			}
+			
+			catch (Exception $e) {
+				// Safe to ignore...
 			}
 			
 			return true;

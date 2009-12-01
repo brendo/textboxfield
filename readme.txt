@@ -3,7 +3,7 @@ Field: Text Box
 
 An enhanced replacement for the default Text Input and Textarea fields.
 
-Version: 2.0.9
+Version: 2.0.10
 Author: Rowan Lewis <me@rowanlewis.com>
 Build Date: 1 December 2009
 Requirements: Symphony 2.0.1
