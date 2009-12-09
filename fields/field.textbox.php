@@ -74,8 +74,77 @@
 			return true;
 		}
 		
-		public function createHandle($value) {
-			return Lang::createHandle(strip_tags(html_entity_decode($value)));
+	/*-------------------------------------------------------------------------
+		Utilities:
+	-------------------------------------------------------------------------*/
+		
+		public function createHandle($value, $entry_id) {
+			$handle = Lang::createHandle(strip_tags(html_entity_decode($value)));
+			
+			if ($this->isHandleUsed($handle, $entry_id)) {
+				if ($this->isHandleFresh($handle, $value, $entry_id)) {
+					return $this->getCurrentHandle($entry_id);
+				}
+				
+				else {
+					$count = 2;
+ 					
+ 					while (!$this->isHandleUnique("{$handle}-{$count}", $entry_id)) $count++;
+ 					
+					return "{$handle}-{$count}";
+				}
+			}
+			
+			return $handle;
+		}
+		
+		public function getCurrentHandle($entry_id) {
+			return $this->_engine->Database->fetchVar('handle', 0, sprintf(
+				"
+					SELECT
+						f.handle
+					FROM
+						`tbl_entries_data_%s` AS f
+					WHERE
+						f.entry_id = '%s'
+					LIMIT 1
+				",
+				$this->get('id'), $entry_id
+			));
+		}
+		
+		public function isHandleUsed($handle, $entry_id) {
+			return (boolean)$this->_engine->Database->fetchVar('id', 0, sprintf(
+				"
+					SELECT
+						f.id
+					FROM
+						`tbl_entries_data_%s` AS f
+					WHERE
+						f.handle = '%s'
+						%s
+					LIMIT 1
+				",
+				$this->get('id'), $handle,
+				(!is_null($entry_id) ? "AND f.entry_id != {$entry_id}" : '')
+			));
+		}
+		
+		public function isHandleFresh($handle, $value, $entry_id) {
+			return (boolean)$this->_engine->Database->fetchVar('id', 0, sprintf(
+				"
+					SELECT
+						f.id
+					FROM
+						`tbl_entries_data_%s` AS f
+					WHERE
+						f.entry_id = '%s'
+						AND f.value = '%s'
+					LIMIT 1
+				",
+				$this->get('id'), $entry_id,
+				$this->cleanValue(General::sanitize($value))
+			));
 		}
 		
 	/*-------------------------------------------------------------------------
@@ -364,7 +433,7 @@
 			$status = self::__OK__;
 			
 			$result = array(
-				'handle'			=> $this->createHandle($data),
+				'handle'			=> $this->createHandle($data, $entry_id),
 				'value'				=> $data,
 				'value_formatted'	=> $this->applyFormatting($data),
 				'word_count'		=> General::countWords($data)
