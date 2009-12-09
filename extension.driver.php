@@ -42,17 +42,25 @@
 		}
 		
 		public function update($previousVersion) {
-			try {
+			$has_length_column = (boolean)$this->_Parent->Database->fetchVar(
+				'Field', 0,
+				"
+					SHOW COLUMNS FROM
+						`tbl_fields_textbox`
+					WHERE
+						Field = 'length'
+				"
+			);
+			
+			if (!$has_length_column) {
 				$this->_Parent->Database->query("
 					ALTER TABLE
 						`tbl_fields_textbox`
 					ADD COLUMN
 						`length` INT(11) UNSIGNED DEFAULT NULL
+					AFTER
+						`size`
 				");
-			}
-			
-			catch (Exception $e) {
-				// Safe to ignore...
 			}
 			
 			return true;
