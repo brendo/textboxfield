@@ -33,6 +33,7 @@
 					`formatter` VARCHAR(255) DEFAULT NULL,
 					`size` ENUM('single', 'small', 'medium', 'large', 'huge') DEFAULT 'medium',
 					`validator` VARCHAR(255) DEFAULT NULL,
+					`length` INT(11) UNSIGNED DEFAULT NULL,
 					PRIMARY KEY (`id`),
 					KEY `field_id` (`field_id`)
 				)

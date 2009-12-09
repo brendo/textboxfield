@@ -81,7 +81,7 @@
 		public function createHandle($value, $entry_id) {
 			$handle = Lang::createHandle(strip_tags(html_entity_decode($value)));
 			
-			if ($this->isHandleUsed($handle, $entry_id)) {
+			if ($this->isHandleLocked($handle, $entry_id)) {
 				if ($this->isHandleFresh($handle, $value, $entry_id)) {
 					return $this->getCurrentHandle($entry_id);
 				}
@@ -89,7 +89,7 @@
 				else {
 					$count = 2;
  					
- 					while (!$this->isHandleUnique("{$handle}-{$count}", $entry_id)) $count++;
+ 					while ($this->isHandleLocked("{$handle}-{$count}", $entry_id)) $count++;
  					
 					return "{$handle}-{$count}";
 				}
@@ -113,7 +113,7 @@
 			));
 		}
 		
-		public function isHandleUsed($handle, $entry_id) {
+		public function isHandleLocked($handle, $entry_id) {
 			return (boolean)$this->_engine->Database->fetchVar('id', 0, sprintf(
 				"
 					SELECT
