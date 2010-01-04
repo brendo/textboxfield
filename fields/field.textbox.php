@@ -126,7 +126,7 @@
 					LIMIT 1
 				",
 				$this->get('id'), $handle,
-				(!is_null($entry_id) ? "AND f.entry_id != {$entry_id}" : '')
+				(!is_null($entry_id) ? "AND f.entry_id != '{$entry_id}'" : '')
 			));
 		}
 		
