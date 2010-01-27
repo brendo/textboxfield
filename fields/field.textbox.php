@@ -335,9 +335,11 @@
 				array(
 					'field'		=> &$this,
 					'label'		=> &$label,
-					'textarea'	=> &$input
+					'input'		=> &$input
 				)
 			);
+			
+			if (is_null($label)) return;
 			
 			$label->appendChild($input);
 			
