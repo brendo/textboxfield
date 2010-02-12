@@ -227,8 +227,30 @@
 			
 			if (!is_null($append_after)) $wrapper->appendChild($append_after);
 			
+		/*---------------------------------------------------------------------
+			Show full
+		---------------------------------------------------------------------*/
+			
+			$input = Widget::Input(
+				"fields[{$order}][show_full]",
+				'no', 'hidden'
+			);
+			$wrapper->appendChild($input);
+			
+			$input = Widget::Input(
+				"fields[{$order}][show_full]",
+				'yes', 'checkbox'
+			);
+			
+			if ($this->get('show_full') == 'yes') {
+				$input->setAttribute('checked', 'checked');
+			}
+			
+			$label = Widget::Label(__('%s Show full text in column', array($input->generate())));
+			
 			$this->appendRequiredCheckbox($wrapper);
 			$this->appendShowColumnCheckbox($wrapper);
+			$wrapper->appendChild($label);
 		}
 		
 		public function commit($propogate = null) {
@@ -245,6 +267,7 @@
 				'field_id'			=> $id,
 				'formatter'			=> $this->get('formatter'),
 				'size'				=> $this->get('size'),
+				'show_full'			=> $this->get('show_full'),
 				'validator'			=> $this->get('validator'),
 				'length'			=> (
 					(integer)$this->get('length') > 0
@@ -480,7 +503,7 @@
 			);
 		}
 		
-		public function prepareTableValue($data, XMLElement $link = null) {
+		public function xprepareTableValue($data, XMLElement $link = null) {
 			if (empty($data) or strlen(trim($data['value'])) == 0) return;
 			
 			return parent::prepareTableValue(
@@ -488,6 +511,30 @@
 					'value'		=> General::sanitize(strip_tags($data['value']))
 				), $link
 			);
+		}
+		
+		public function prepareTableValue($data, XMLElement $link = null) {
+			if (empty($data) or strlen(trim($data['value'])) == 0) return;
+			
+			if ($this->get('show_full') != 'yes') {
+				$max_length = Symphony::Configuration()->get('cell_truncation_length', 'symphony');
+				$max_length = ($max_length ? $max_length : 75);
+				
+				$value = strip_tags($data['value']);
+				$value = (strlen($value) <= $max_length ? $value : substr($value, 0, $max_length) . '...');
+			}
+			
+			else {
+				$value = $data['value'];
+			}
+			
+			if ($link) {
+				$link->setValue($value);
+				
+				return $link->generate();
+			}
+			
+			return $value;
 		}
 		
 		public function getParameterPoolValue($data) {

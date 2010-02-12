@@ -10,8 +10,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.0.11',
-				'release-date'	=> '2009-12-09',
+				'version'		=> '2.0.12',
+				'release-date'	=> '2010-02-12',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
 					'website'		=> 'http://rowanlewis.com/',
@@ -52,6 +52,15 @@
 						Field = 'length'
 				"
 			);
+			$has_show_full_column = (boolean)$this->_Parent->Database->fetchVar(
+				'Field', 0,
+				"
+					SHOW COLUMNS FROM
+						`tbl_fields_textbox`
+					WHERE
+						Field = 'show_full'
+				"
+			);
 			
 			if (!$has_length_column) {
 				$this->_Parent->Database->query("
@@ -59,6 +68,17 @@
 						`tbl_fields_textbox`
 					ADD COLUMN
 						`length` INT(11) UNSIGNED DEFAULT NULL
+					AFTER
+						`size`
+				");
+			}
+			
+			if (!$has_show_full_column) {
+				$this->_Parent->Database->query("
+					ALTER TABLE
+						`tbl_fields_textbox`
+					ADD COLUMN
+						`show_full` ENUM('yes', 'no') DEFAULT 'no'
 					AFTER
 						`size`
 				");
