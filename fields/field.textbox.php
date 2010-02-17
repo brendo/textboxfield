@@ -415,7 +415,7 @@
 				);
 				
 				return self::__MISSING_FIELDS__;
-			}	
+			}
 			
 			if (empty($data)) self::__OK__;
 			
@@ -503,16 +503,6 @@
 			);
 		}
 		
-		public function xprepareTableValue($data, XMLElement $link = null) {
-			if (empty($data) or strlen(trim($data['value'])) == 0) return;
-			
-			return parent::prepareTableValue(
-				array(
-					'value'		=> General::sanitize(strip_tags($data['value']))
-				), $link
-			);
-		}
-		
 		public function prepareTableValue($data, XMLElement $link = null) {
 			if (empty($data) or strlen(trim($data['value'])) == 0) return;
 			
@@ -525,7 +515,7 @@
 			}
 			
 			else {
-				$value = $data['value'];
+				$value = General::sanitize(strip_tags($data['value']));
 			}
 			
 			if ($link) {
