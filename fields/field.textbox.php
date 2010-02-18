@@ -509,14 +509,14 @@
 			if ($this->get('show_full') != 'yes') {
 				$max_length = Symphony::Configuration()->get('cell_truncation_length', 'symphony');
 				$max_length = ($max_length ? $max_length : 75);
-				
-				$value = strip_tags($data['value']);
-				$value = (strlen($value) <= $max_length ? $value : substr($value, 0, $max_length) . '...');
 			}
 			
 			else {
-				$value = General::sanitize(strip_tags($data['value']));
+				$max_length = 400;
 			}
+			
+			$value = strip_tags($data['value']);
+			$value = (strlen($value) <= $max_length ? $value : substr($value, 0, $max_length) . '...');
 			
 			if ($link) {
 				$link->setValue($value);
