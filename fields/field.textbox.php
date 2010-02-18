@@ -519,7 +519,7 @@
 			$value = (strlen($value) <= $max_length ? $value : substr($value, 0, $max_length) . '...');
 			
 			if ($this->get('show_full') == 'yes') {
-				$value = wordwrap($value, 75);
+				$value = wordwrap($value, 75, '<br />');
 			}
 			
 			if ($link) {
