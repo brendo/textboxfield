@@ -10,8 +10,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.0.12',
-				'release-date'	=> '2010-02-12',
+				'version'		=> '2.0.14',
+				'release-date'	=> '2010-02-19',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
 					'website'		=> 'http://rowanlewis.com/',
@@ -30,10 +30,11 @@
 				CREATE TABLE IF NOT EXISTS `tbl_fields_textbox` (
 					`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 					`field_id` INT(11) UNSIGNED NOT NULL,
-					`formatter` VARCHAR(255) DEFAULT NULL,
-					`size` ENUM('single', 'small', 'medium', 'large', 'huge') DEFAULT 'medium',
-					`validator` VARCHAR(255) DEFAULT NULL,
-					`length` INT(11) UNSIGNED DEFAULT NULL,
+					`column_length` INT(11) UNSIGNED DEFAULT 75,
+					`text_size` ENUM('single', 'small', 'medium', 'large', 'huge') DEFAULT 'medium',
+					`text_formatter` VARCHAR(255) DEFAULT NULL,
+					`text_validator` VARCHAR(255) DEFAULT NULL,
+					`text_length` INT(11) UNSIGNED DEFAULT 0,
 					PRIMARY KEY (`id`),
 					KEY `field_id` (`field_id`)
 				)
@@ -43,48 +44,106 @@
 		}
 		
 		public function update($previousVersion) {
-			$has_length_column = (boolean)$this->_Parent->Database->fetchVar(
-				'Field', 0,
-				"
-					SHOW COLUMNS FROM
-						`tbl_fields_textbox`
-					WHERE
-						Field = 'length'
-				"
-			);
-			$has_show_full_column = (boolean)$this->_Parent->Database->fetchVar(
-				'Field', 0,
-				"
-					SHOW COLUMNS FROM
-						`tbl_fields_textbox`
-					WHERE
-						Field = 'show_full'
-				"
-			);
-			
-			if (!$has_length_column) {
-				$this->_Parent->Database->query("
-					ALTER TABLE
-						`tbl_fields_textbox`
-					ADD COLUMN
-						`length` INT(11) UNSIGNED DEFAULT NULL
-					AFTER
-						`size`
-				");
+			// Column length:
+			if ($this->updateHasColumn('show_full')) {
+				$this->updateRemoveColumn('show_full');
 			}
 			
-			if (!$has_show_full_column) {
-				$this->_Parent->Database->query("
-					ALTER TABLE
-						`tbl_fields_textbox`
-					ADD COLUMN
-						`show_full` ENUM('yes', 'no') DEFAULT 'no'
-					AFTER
-						`size`
-				");
+			if (!$this->updateHasColumn('column_length')) {
+				$this->updateAddColumn('column_length', 'INT(11) UNSIGNED DEFAULT 75 AFTER `field_id`');
+			}
+			
+			// Text size:
+			if ($this->updateHasColumn('size')) {
+				$this->updateRenameColumn('size', 'text_size');
+			}
+			
+			// Text formatter:
+			if ($this->updateHasColumn('formatter')) {
+				$this->updateRenameColumn('formatter', 'text_formatter');
+			}
+			
+			// Text validator:
+			if ($this->updateHasColumn('validator')) {
+				$this->updateRenameColumn('validator', 'text_validator');
+			}
+			
+			// Text length:
+			if ($this->updateHasColumn('length')) {
+				$this->updateRenameColumn('length', 'text_length');
+			}
+			
+			else if (!$this->updateHasColumn('text_length')) {
+				$this->updateAddColumn('text_length', 'INT(11) UNSIGNED DEFAULT 0 AFTER `text_formatter`');
 			}
 			
 			return true;
+		}
+		
+		public function updateAddColumn($column, $type) {
+			return Symphony::Database()->query("
+				ALTER TABLE
+					`tbl_fields_textbox`
+				ADD COLUMN
+					`{$column}` {$type}
+			");
+		}
+		
+		public function updateHasColumn($column) {
+			return (boolean)Symphony::Database()->fetchVar(
+				'Field', 0,
+				"
+					SHOW COLUMNS FROM
+						`tbl_fields_textbox`
+					WHERE
+						Field = '{$column}'
+				"
+			);
+		}
+		
+		public function updateRemoveColumn($column) {
+			return Symphony::Database()->query("
+				ALTER TABLE
+					`tbl_fields_textbox`
+				DROP COLUMN
+					`{$column}`
+			");
+		}
+		
+		public function updateRenameColumn($from, $to) {
+			header('content-type: text/html');
+			
+			$data = Symphony::Database()->fetchRow(
+				0, "
+					SHOW COLUMNS FROM
+						`tbl_fields_textbox`
+					WHERE
+						Field = '{$from}'
+				"
+			);
+			
+			if (!is_null($data['Default'])) {
+				$type = 'DEFAULT ' . var_export($data['Default'], true);
+			}
+			
+			else if ($data['Null'] == 'YES') {
+				$type .= 'DEFAULT NULL';
+			}
+			
+			else {
+				$type .= 'NOT NULL';
+			}
+			
+			return Symphony::Database()->query(sprintf(
+				"
+					ALTER TABLE
+						`tbl_fields_textbox`
+					CHANGE
+						`%s` `%s` %s
+				",
+				$from, $to,
+				$data['Type'] . ' ' . $type
+			));
 		}
 		
 	/*-------------------------------------------------------------------------
