@@ -151,18 +151,12 @@
 		Settings:
 	-------------------------------------------------------------------------*/
 		
-		public function displaySettingsPanel(&$wrapper, $errors = null, $append_before = null, $append_after = null) {
+		public function displaySettingsPanel(&$wrapper, $errors = null) {
 			$this->_driver->addSettingsHeaders($this->_engine->Page);
 			
 			parent::displaySettingsPanel($wrapper, $errors);
 			
 			$order = $this->get('sortorder');
-			
-		/*---------------------------------------------------------------------
-			Append before
-		---------------------------------------------------------------------*/
-			
-			if (!is_null($append_before)) $wrapper->appendChild($append_before);
 			
 		/*---------------------------------------------------------------------
 			Expression
@@ -174,12 +168,12 @@
 			$values = $this->_sizes;
 			
 			foreach ($values as &$value) {
-				$value[1] = $value[0] == $this->get('size');
+				$value[1] = $value[0] == $this->get('text_size');
 			}
 			
 			$label = Widget::Label('Size');
 			$label->appendChild(Widget::Select(
-				"fields[{$order}][size]", $values
+				"fields[{$order}][text_size]", $values
 			));
 			
 			$group->appendChild($label);
@@ -189,8 +183,8 @@
 		---------------------------------------------------------------------*/
 			
 			$group->appendChild($this->buildFormatterSelect(
-				$this->get('formatter'),
-				"fields[{$order}][formatter]",
+				$this->get('text_formatter'),
+				"fields[{$order}][text_formatter]",
 				'Text Formatter'
 			));
 			$wrapper->appendChild($group);
@@ -199,58 +193,54 @@
 			Validator
 		---------------------------------------------------------------------*/
 			
-			$group = new XMLElement('div');
-			$group->setAttribute('class', 'group');
-			
 			$div = new XMLElement('div');
 			$this->buildValidationSelect(
-				$div, $this->get('validator'), "fields[{$order}][validator]"
+				$div, $this->get('text_validator'), "fields[{$order}][text_validator]"
 			);
-			$group->appendChild($div);
+			$wrapper->appendChild($div);
 			
 		/*---------------------------------------------------------------------
 			Limiting
 		---------------------------------------------------------------------*/
 			
-			$label = Widget::Label(__('Maximum Length'));
+			$group = new XMLElement('div');
+			$group->setAttribute('class', 'group');
+			
 			$input = Widget::Input(
-				"fields[{$order}][length]",
-				(integer)$this->get('length')
+				"fields[{$order}][text_length]",
+				(integer)$this->get('text_length')
 			);
-			$label->appendChild($input);
-			$group->appendChild($label);
+			$input->setAttribute('size', '3');
+			
+			$group->appendChild(Widget::Label(
+				__('Limit input to %s characters', array(
+					$input->generate()
+				))
+			));
+			
+		/*---------------------------------------------------------------------
+			Show characters
+		---------------------------------------------------------------------*/
+			
+			$input = Widget::Input(
+				"fields[{$order}][column_length]",
+				$this->get('column_length')
+			);
+			$input->setAttribute('size', '3');
+			
+			$group->appendChild(Widget::Label(
+				__('Show %s characters in preview', array(
+					$input->generate()
+				))
+			));
 			$wrapper->appendChild($group);
 			
 		/*---------------------------------------------------------------------
-			Append after
+			Defaults
 		---------------------------------------------------------------------*/
-			
-			if (!is_null($append_after)) $wrapper->appendChild($append_after);
-			
-		/*---------------------------------------------------------------------
-			Show full
-		---------------------------------------------------------------------*/
-			
-			$input = Widget::Input(
-				"fields[{$order}][show_full]",
-				'no', 'hidden'
-			);
-			$wrapper->appendChild($input);
-			
-			$input = Widget::Input(
-				"fields[{$order}][show_full]",
-				'yes', 'checkbox'
-			);
-			
-			if ($this->get('show_full') == 'yes') {
-				$input->setAttribute('checked', 'checked');
-			}
-			
-			$label = Widget::Label(__('%s Show full text in column', array($input->generate())));
 			
 			$this->appendRequiredCheckbox($wrapper);
 			$this->appendShowColumnCheckbox($wrapper);
-			$wrapper->appendChild($label);
 		}
 		
 		public function commit($propogate = null) {
@@ -265,13 +255,17 @@
 			
 			$fields = array(
 				'field_id'			=> $id,
-				'formatter'			=> $this->get('formatter'),
-				'size'				=> $this->get('size'),
-				'show_full'			=> $this->get('show_full'),
-				'validator'			=> $this->get('validator'),
-				'length'			=> (
-					(integer)$this->get('length') > 0
-					? $this->get('length')
+				'column_length'		=> (
+					(integer)$this->get('column_length') > 25
+					? $this->get('column_length')
+					: 25
+				),
+				'text_size'			=> $this->get('text_size'),
+				'text_formatter'	=> $this->get('text_formatter'),
+				'text_validator'	=> $this->get('text_validator'),
+				'text_length'		=> (
+					(integer)$this->get('text_length') > 0
+					? $this->get('text_length')
 					: 0
 				)
 			);
@@ -302,7 +296,7 @@
 			$optional = '';
 			
 			if ($this->get('required') != 'yes') {
-				if ((integer)$this->get('length') > 0) {
+				if ((integer)$this->get('text_length') > 0) {
 					$optional = __('$1 of $2 remaining &ndash; Optional');
 				}
 				
@@ -311,7 +305,7 @@
 				}
 			}
 			
-			else if ((integer)$this->get('length') > 0) {
+			else if ((integer)$this->get('text_length') > 0) {
 				$optional = __('$1 of $2 remaining');
 			}
 			
@@ -320,7 +314,7 @@
 			}
 			
 			// Input box:
-			if ($this->get('size') == 'single') {
+			if ($this->get('text_size') == 'single') {
 				$input = Widget::Input(
 					"fields{$prefix}[$element_name]{$postfix}", General::sanitize($data['value'])
 				);
@@ -344,14 +338,14 @@
 			}
 			
 			// Add classes:
-			$classes[] = 'size-' . $this->get('size');
+			$classes[] = 'size-' . $this->get('text_size');
 			
-			if ($this->get('formatter') != 'none') {
-				$classes[] = $this->get('formatter');
+			if ($this->get('text_formatter') != 'none') {
+				$classes[] = $this->get('text_formatter');
 			}
 			
 			$input->setAttribute('class', implode(' ', $classes));
-			$input->setAttribute('length', (integer)$this->get('length'));
+			$input->setAttribute('length', (integer)$this->get('text_length'));
 			
 			$this->_engine->ExtensionManager->notifyMembers(
 				$delegate, '/backend/',
@@ -378,7 +372,7 @@
 	-------------------------------------------------------------------------*/
 		
 		public function applyFormatting($data) {
-			if ($this->get('formatter') != 'none') {
+			if ($this->get('text_formatter') != 'none') {
 				if (isset($this->_ParentCatalogue['entrymanager'])) {
 					$tfm = $this->_ParentCatalogue['entrymanager']->formatterManager;
 				}
@@ -387,7 +381,7 @@
 					$tfm = new TextformatterManager($this->_engine);
 				}
 				
-				$formatter = $tfm->create($this->get('formatter'));
+				$formatter = $tfm->create($this->get('text_formatter'));
 				$formatted = $formatter->run($data);
 			 	$formatted = preg_replace('/&(?![a-z]{0,4}\w{2,3};|#[x0-9a-f]{2,6};)/i', '&amp;', $formatted);
 			 	
@@ -398,13 +392,13 @@
 		}
 		
 		public function applyValidationRules($data) {			
-			$rule = $this->get('validator');
+			$rule = $this->get('text_validator');
 			
 			return ($rule ? General::validateString($data, $rule) : true);
 		}
 		
 		public function checkPostFieldData($data, &$message, $entry_id = null) {
-			$length = (integer)$this->get('length');
+			$length = (integer)$this->get('text_length');
 			$message = null;
 			
 			if ($this->get('required') == 'yes' and strlen(trim($data)) == 0) {
@@ -506,20 +500,24 @@
 		public function prepareTableValue($data, XMLElement $link = null) {
 			if (empty($data) or strlen(trim($data['value'])) == 0) return;
 			
-			if ($this->get('show_full') != 'yes') {
-				$max_length = Symphony::Configuration()->get('cell_truncation_length', 'symphony');
-				$max_length = ($max_length ? $max_length : 75);
-			}
+			@header('content-type: text/html');
 			
-			else {
-				$max_length = 400;
-			}
+			$max_length = (integer)$this->get('column_length');
+			$max_length = ($max_length ? $max_length : 75);
 			
 			$value = strip_tags($data['value']);
-			$value = (strlen($value) <= $max_length ? $value : substr($value, 0, $max_length) . '...');
 			
-			if ($this->get('show_full') == 'yes') {
-				$value = wordwrap($value, 75);
+			if ($max_length < strlen($value)) {
+				$lines = explode("\n", wordwrap($value, $max_length - 1, "\n"));
+				$value = array_shift($lines);
+				$value = rtrim($value, "\n\t !?.,:;");
+				$value .= '...';
+			}
+			
+			$value = str_replace('...', '&#x2026;', $value);
+			
+			if ($max_length > 75) {
+				$value = wordwrap($value, 75, '<br />');
 			}
 			
 			if ($link) {

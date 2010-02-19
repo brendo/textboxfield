@@ -15,3 +15,30 @@
 	padding: 2px;
 	width: 100%;
 }
+.field-textbox .group {
+	display: table;
+	margin: 0 0 1.5em 0;
+	overflow: visible;
+	padding: 0;
+	position: static;
+	table-layout: fixed;
+	width: 100%;
+}
+.field-textbox .group > * {
+	display: table-cell;
+	float: none;
+	margin: 0;
+	overflow: visible;
+	padding: 0 16px;
+	position: static;
+	width: auto;
+}
+.field-textbox .group > :first-child {
+	padding-left: 0;
+}
+.field-textbox .group > :last-child {
+	padding-right: 0;
+}
+.field-textbox .group > * > :last-child {
+	margin-bottom: 0;
+}
