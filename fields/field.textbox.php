@@ -151,6 +151,11 @@
 		Settings:
 	-------------------------------------------------------------------------*/
 		
+		public function findDefaults(&$fields) {
+			$fields['text_length'] = 75;
+			$fields['column_length'] = 75;
+		}
+		
 		public function displaySettingsPanel(&$wrapper, $errors = null) {
 			$this->_driver->addSettingsHeaders($this->_engine->Page);
 			
@@ -224,7 +229,7 @@
 			
 			$input = Widget::Input(
 				"fields[{$order}][column_length]",
-				$this->get('column_length')
+				(integer)$this->get('column_length')
 			);
 			$input->setAttribute('size', '3');
 			
