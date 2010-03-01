@@ -152,7 +152,8 @@
 	-------------------------------------------------------------------------*/
 		
 		public function findDefaults(&$fields) {
-			$fields['text_length'] = 75;
+			$fields['text_length'] = 0;
+			$fields['text_size'] = 'medium';
 			$fields['column_length'] = 75;
 		}
 		
