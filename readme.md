@@ -1,4 +1,4 @@
-## Field: Text Box
+# Field: Text Box
 
 An enhanced replacement for the default Text Input and Textarea fields.
 
