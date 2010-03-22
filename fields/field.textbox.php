@@ -239,8 +239,42 @@
 			Defaults
 		---------------------------------------------------------------------*/
 			
-			$this->appendRequiredCheckbox($wrapper);
-			$this->appendShowColumnCheckbox($wrapper);
+			$list = new XMLElement('ul');
+			$list->setAttribute('class', 'options-list');
+			
+			$item = new XMLElement('li');
+			$input = Widget::Input(
+				"fields[{$order}][text_cdata]",
+				'no', 'hidden'
+			);
+			$item->appendChild($input);
+			
+			$input = Widget::Input(
+				"fields[{$order}][text_cdata]",
+				'yes', 'checkbox'
+			);
+			
+			if ($this->get('text_cdata') == 'yes') {
+				$input->setAttribute('selected', 'selected');
+			}
+			
+			$item->appendChild(Widget::Label(
+				__('%s Wrap in CDATA', array(
+					$input->generate()
+				))
+			));
+			$list->appendChild($item);
+			
+			$item = new XMLElement('li');
+			$this->appendRequiredCheckbox($item);
+			$list->appendChild($item);
+			
+			$item = new XMLElement('li');
+			$this->appendShowColumnCheckbox($item);
+			$list->appendChild($item);
+			
+			$wrapper->appendChild($list);
+			$wrapper->setAttribute('class', $wrapper->getAttribute('class') . ' field-textbox');
 		}
 		
 		public function commit($propogate = null) {
@@ -267,7 +301,8 @@
 					(integer)$this->get('text_length') > 0
 					? $this->get('text_length')
 					: 0
-				)
+				),
+				'text_cdata'		=> $this->get('text_cdata')
 			);
 			
 			$this->Database->query("

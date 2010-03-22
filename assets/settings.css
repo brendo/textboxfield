@@ -1,44 +1,15 @@
-.field-textbox-limit {
-	margin-bottom: 1.75em;
-}
-.field-textbox-limit label {
-	margin-bottom: 0;
-}
-.field-textbox-limit input[type=text] {
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	display: block;
-	font-family: inherit;
-	font-size: 109.09%;
-	margin-top: 2px;
-	padding: 2px;
-	width: 100%;
-}
-.field-textbox .group {
-	display: table;
-	margin: 0 0 1.5em 0;
-	overflow: visible;
-	padding: 0;
-	position: static;
-	table-layout: fixed;
-	width: 100%;
-}
-.field-textbox .group > * {
-	display: table-cell;
-	float: none;
+.field-textbox .options-list {
+	border-top: 1px solid #CCCCBB;
+	display: -moz-box;
+	display: -webkit-box;
+	list-style: none;
 	margin: 0;
-	overflow: visible;
-	padding: 0 16px;
-	position: static;
-	width: auto;
+	padding: 1.75em 0 0 0;
+	width: 100%;
 }
-.field-textbox .group > :first-child {
-	padding-left: 0;
+.field-textbox .options-list > * {
+	padding-right: 1.75em;
 }
-.field-textbox .group > :last-child {
+.field-textbox .options-list > *:last-child {
 	padding-right: 0;
-}
-.field-textbox .group > * > :last-child {
-	margin-bottom: 0;
 }
