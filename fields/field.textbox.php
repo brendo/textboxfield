@@ -299,19 +299,11 @@
 			
 			$fields = array(
 				'field_id'			=> $id,
-				'column_length'		=> (
-					(integer)$this->get('column_length') > 25
-					? $this->get('column_length')
-					: 25
-				),
+				'column_length'		=> max((integer)$this->get('text_length'), 25),
 				'text_size'			=> $this->get('text_size'),
 				'text_formatter'	=> $this->get('text_formatter'),
 				'text_validator'	=> $this->get('text_validator'),
-				'text_length'		=> (
-					(integer)$this->get('text_length') > 0
-					? $this->get('text_length')
-					: 0
-				),
+				'text_length'		=> max((integer)$this->get('text_length'), 0),
 				'text_cdata'		=> $this->get('text_cdata')
 			);
 			
@@ -553,8 +545,6 @@
 		
 		public function prepareTableValue($data, XMLElement $link = null) {
 			if (empty($data) or strlen(trim($data['value'])) == 0) return;
-			
-			@header('content-type: text/html');
 			
 			$max_length = (integer)$this->get('column_length');
 			$max_length = ($max_length ? $max_length : 75);

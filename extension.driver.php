@@ -1,12 +1,6 @@
 <?php
 	
 	class Extension_TextBoxField extends Extension {
-	/*-------------------------------------------------------------------------
-		Definition:
-	-------------------------------------------------------------------------*/
-		
-		protected static $fields = array();
-		
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
