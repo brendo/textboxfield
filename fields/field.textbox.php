@@ -156,9 +156,11 @@
 	-------------------------------------------------------------------------*/
 		
 		public function findDefaults(&$fields) {
-			$fields['text_length'] = 0;
-			$fields['text_size'] = 'medium';
 			$fields['column_length'] = 75;
+			$fields['text_size'] = 'medium';
+			$fields['text_length'] = 0;
+			$fields['text_handle'] = 'yes';
+			$fields['text_cdata'] = 'no';
 		}
 		
 		public function displaySettingsPanel(&$wrapper, $errors = null) {
@@ -246,11 +248,34 @@
 			$wrapper->appendChild($group);
 			
 		/*---------------------------------------------------------------------
-			Defaults
+			Options
 		---------------------------------------------------------------------*/
 			
 			$list = new XMLElement('ul');
 			$list->setAttribute('class', 'options-list');
+			
+			$item = new XMLElement('li');
+			$input = Widget::Input(
+				"fields[{$order}][text_handle]",
+				'no', 'hidden'
+			);
+			$item->appendChild($input);
+			
+			$input = Widget::Input(
+				"fields[{$order}][text_handle]",
+				'yes', 'checkbox'
+			);
+			
+			if ($this->get('text_handle') == 'yes') {
+				$input->setAttribute('checked', 'checked');
+			}
+			
+			$item->appendChild(Widget::Label(
+				__('%s Handles in output', array(
+					$input->generate()
+				))
+			));
+			$list->appendChild($item);
 			
 			$item = new XMLElement('li');
 			$input = Widget::Input(
@@ -269,7 +294,7 @@
 			}
 			
 			$item->appendChild(Widget::Label(
-				__('%s Wrap in CDATA', array(
+				__('%s Wrap output with CDATA', array(
 					$input->generate()
 				))
 			));
@@ -304,7 +329,8 @@
 				'text_formatter'	=> $this->get('text_formatter'),
 				'text_validator'	=> $this->get('text_validator'),
 				'text_length'		=> max((integer)$this->get('text_length'), 0),
-				'text_cdata'		=> $this->get('text_cdata')
+				'text_cdata'		=> $this->get('text_cdata'),
+				'text_handle'		=> $this->get('text_handle')
 			);
 			
 			$this->Database->query("
@@ -538,6 +564,10 @@
 				'word-count'	=> $data['word_count']
 			);
 			
+			if ($this->get('text_handle') != 'yes') {
+				unset($attributes['handle']);
+			}
+			
 			$wrapper->appendChild(new XMLElement(
 				$this->get('element_name'), $value, $attributes
 			));
@@ -630,6 +660,7 @@
 						'http://dev.mysql.com/doc/mysql/en/Regexp.html'
 					))
 				),
+				
 				array(
 					'name'				=> 'contains',
 					'filter'			=> 'contains:',

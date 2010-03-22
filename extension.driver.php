@@ -4,7 +4,7 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.0.16',
+				'version'		=> '2.0.17',
 				'release-date'	=> '2010-03-22',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
@@ -30,6 +30,7 @@
 					`text_validator` VARCHAR(255) DEFAULT NULL,
 					`text_length` INT(11) UNSIGNED DEFAULT 0,
 					`text_cdata` ENUM('yes', 'no') DEFAULT 'no',
+					`text_handle` ENUM('yes', 'no') DEFAULT 'no',
 					PRIMARY KEY (`id`),
 					KEY `field_id` (`field_id`)
 				)
@@ -75,6 +76,11 @@
 			// Text CDATA:
 			if (!$this->updateHasColumn('text_cdata')) {
 				$this->updateAddColumn('text_cdata', "ENUM('yes', 'no') DEFAULT 'no' AFTER `text_length`");
+			}
+			
+			// Text handle:
+			if (!$this->updateHasColumn('text_handle')) {
+				$this->updateAddColumn('text_handle', "ENUM('yes', 'no') DEFAULT 'no' AFTER `text_cdata`");
 			}
 			
 			return true;
