@@ -261,7 +261,7 @@
 			);
 			
 			if ($this->get('text_cdata') == 'yes') {
-				$input->setAttribute('selected', 'selected');
+				$input->setAttribute('checked', 'checked');
 			}
 			
 			$item->appendChild(Widget::Label(
@@ -508,19 +508,28 @@
 		
 		public function fetchIncludableElements() {
 			return array(
-				$this->get('element_name'),
-				$this->get('element_name') . ': raw'
+				$this->get('element_name') . ': formatted',
+				$this->get('element_name') . ': unformatted'
 			);
 		}
 		
 		public function appendFormattedElement(&$wrapper, $data, $encode = false, $mode = null) {
-			if ($mode == 'raw') {
-				$value = trim($data['value']);
+			if ($mode == 'unformatted') {
+				$value = General::sanitize(trim($data['value']));
 			}
 			
 			else {
 				$mode = 'normal';
 				$value = trim($data['value_formatted']);
+			}
+			
+			if ($this->get('text_cdata') == 'yes') {
+				$value = '<![CDATA[' . $value . ']]>';
+			}
+			
+			// TODO: Remove this for 2.1 release.
+			else if ($encode) {
+				$value = General::sanitize($value);
 			}
 			
 			$attributes = array(
@@ -529,13 +538,9 @@
 				'word-count'	=> $data['word_count']
 			);
 			
-			$wrapper->appendChild(
-				new XMLElement(
-					$this->get('element_name'), (
-						$encode ? General::sanitize($value) : $value
-					), $attributes
-				)
-			);
+			$wrapper->appendChild(new XMLElement(
+				$this->get('element_name'), $value, $attributes
+			));
 		}
 		
 		public function prepareTableValue($data, XMLElement $link = null) {
