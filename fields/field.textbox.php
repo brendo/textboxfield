@@ -271,7 +271,7 @@
 			}
 			
 			$item->appendChild(Widget::Label(
-				__('%s Handles in output', array(
+				__('%s Output with handles', array(
 					$input->generate()
 				))
 			));
@@ -294,7 +294,7 @@
 			}
 			
 			$item->appendChild(Widget::Label(
-				__('%s Wrap output with CDATA', array(
+				__('%s Output as CDATA', array(
 					$input->generate()
 				))
 			));
