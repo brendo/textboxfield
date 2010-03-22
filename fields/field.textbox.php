@@ -147,6 +147,10 @@
 			));
 		}
 		
+		protected function repairEntities($value) {
+			return preg_replace('/&(?!(#[0-9]+|#x[0-9a-f]+|amp|lt|gt);)/i', '&amp;', trim($value));
+		}
+		
 	/*-------------------------------------------------------------------------
 		Settings:
 	-------------------------------------------------------------------------*/
@@ -515,21 +519,25 @@
 		
 		public function appendFormattedElement(&$wrapper, $data, $encode = false, $mode = null) {
 			if ($mode == 'unformatted') {
-				$value = General::sanitize(trim($data['value']));
+				$value = trim($data['value']);
 			}
 			
 			else {
-				$mode = 'normal';
+				$mode = 'formatted';
 				$value = trim($data['value_formatted']);
 			}
 			
-			if ($this->get('text_cdata') == 'yes') {
+			if ($mode == 'unformatted' or $this->get('text_cdata') == 'yes') {
 				$value = '<![CDATA[' . $value . ']]>';
 			}
 			
 			// TODO: Remove this for 2.1 release.
 			else if ($encode) {
 				$value = General::sanitize($value);
+			}
+			
+			else {
+				$value = $this->repairEntities($value);
 			}
 			
 			$attributes = array(
