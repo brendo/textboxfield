@@ -604,8 +604,6 @@
 			));	
 			$wrapper->appendChild($label);
 			
-			$list = new XMLElement('ul');
-			
 			$filters = array(
 				array(
 					'name'				=> 'boolean',
@@ -632,7 +630,6 @@
 						'http://dev.mysql.com/doc/mysql/en/Regexp.html'
 					))
 				),
-				
 				array(
 					'name'				=> 'contains',
 					'filter'			=> 'contains:',
@@ -666,6 +663,8 @@
 					'help'				=> __('Find values that do not end with the given string.')
 				)
 			);
+			
+			$list = new XMLElement('ul');
 			
 			foreach ($filters as $value) {
 				$item = new XMLElement('li', $value['name']);
