@@ -516,7 +516,7 @@
 			
 			$result = array(
 				'handle'			=> $this->createHandle($data, $entry_id),
-				'value'				=> $data,
+				'value'				=> (string)$data,
 				'value_formatted'	=> $this->applyFormatting($data),
 				'word_count'		=> General::countWords($data)
 			);
