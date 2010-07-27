@@ -604,6 +604,10 @@
 		}
 		
 		public function getParameterPoolValue($data) {
+			if ($this->get('text_handle') != 'yes') {
+				return $data['value'];
+			}
+			
 			return $data['handle'];
 		}
 		
