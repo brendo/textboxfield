@@ -2,11 +2,11 @@
 
 An enhanced replacement for the default Text Input and Textarea fields.
 
-- Version: 2.0.16
-- Date: **unreleased**
-- Requirements: Symphony 2.1
-- Author: Rowan Lewis, me@rowanlewis.com
-- GitHub Repository: <http://github.com/rowan-lewis/textboxfield>
+__Version:__ 2.1
+__Date:__ 1 November 2010
+__Requirements:__ Symphony 2.1
+__Author:__ Rowan Lewis <me@rowanlewis.com>
+__GitHub Repository:__ <http://github.com/rowan-lewis/textboxfield>
 
 
 ## Installation
@@ -36,6 +36,14 @@ An enhanced replacement for the default Text Input and Textarea fields.
 
 
 ## Changelog
+
+*Version 2.0.17, 1 November 2010*
+
+ - Added checkbox to wrap output in CDATA regardless of formatting.
+ - Added checkbox to toggle inclusion of handles in output.
+ - Output values instead of handles as parameters if handles are disabled.
+ - Fixed datasource filter editor JavaScript.
+ - A couple of other minor issues.
 
 *Version 2.0.14, 19 February 2010*
 
