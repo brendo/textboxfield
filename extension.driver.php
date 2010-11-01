@@ -4,8 +4,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.0.17',
-				'release-date'	=> '2010-03-22',
+				'version'		=> '2.1',
+				'release-date'	=> '2010-11-01',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
 					'website'		=> 'http://rowanlewis.com/',
