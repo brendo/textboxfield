@@ -3,7 +3,7 @@
 -----------------------------------------------------------------------------*/
 	
 	jQuery(document).ready(function() {
-		jQuery('.field-textbox').each(function() {
+		jQuery('div.field-textbox').each(function() {
 			var self = jQuery(this);
 			var input = self.find('input, textarea');
 			
