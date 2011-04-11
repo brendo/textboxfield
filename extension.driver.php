@@ -4,12 +4,12 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Text Box',
-				'version'		=> '2.1',
-				'release-date'	=> '2010-11-01',
+				'version'		=> '2.2',
+				'release-date'	=> '2011-04-11',
 				'author'		=> array(
 					'name'			=> 'Rowan Lewis',
-					'website'		=> 'http://rowanlewis.com/',
-					'email'			=> 'me@rowanlewis.com'
+					'website'		=> 'http://nbsp.io/',
+					'email'			=> 'me@nbsp.io'
 				),
 				'description' => 'An enhanced text input field.'
 			);
@@ -33,7 +33,7 @@
 					`text_handle` ENUM('yes', 'no') DEFAULT 'no',
 					PRIMARY KEY (`id`),
 					KEY `field_id` (`field_id`)
-				)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 			");
 			
 			return true;

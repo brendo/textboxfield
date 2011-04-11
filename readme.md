@@ -2,10 +2,10 @@
 
 An enhanced replacement for the default Text Input and Textarea fields.
 
-__Version:__ 2.1  
-__Date:__ 1 November 2010  
+__Version:__ 2.2  
+__Date:__ 11 April 2011  
 __Requirements:__ Symphony 2.1  
-__Author:__ Rowan Lewis <me@rowanlewis.com>  
+__Author:__ Rowan Lewis <me@nbsp.io>  
 __GitHub Repository:__ <http://github.com/rowan-lewis/textboxfield>  
 
 
