@@ -360,7 +360,7 @@
 
 			if ($this->get('required') != 'yes') {
 				if ((integer)$this->get('text_length') > 0) {
-					$optional = __('$1 of $2 remaining &ndash; Optional');
+					$optional = __('$1 of $2 remaining') . ' &ndash; ' . __('Optional');
 				}
 
 				else {
@@ -621,7 +621,7 @@
 
 			$wrapper->appendChild(new XMLElement(
 				'h4', sprintf(
-					__('%s <i>%s</i>'),
+					'%s <i>%s</i>',
 					$this->get('label'),
 					$this->name()
 				)
