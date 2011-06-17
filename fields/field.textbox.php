@@ -413,9 +413,10 @@
 			$this->_engine->ExtensionManager->notifyMembers(
 				$delegate, '/backend/',
 				array(
-					'field'		=> &$this,
-					'label'		=> &$label,
-					'input'		=> &$input
+					'field'		=> $this,
+					'label'		=> $label,
+					'input'		=> $input,
+					'textarea'	=> $input
 				)
 			);
 
