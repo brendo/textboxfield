@@ -844,7 +844,7 @@
 
 		public function buildSortingSQL(&$joins, &$where, &$sort, $order = 'ASC') {
 			if (in_array(strtolower($order), array('random', 'rand')) {
-				$sort = 'ORDER BY RAND()'
+				$sort = 'ORDER BY RAND()';
 			}
 			
 			else {
