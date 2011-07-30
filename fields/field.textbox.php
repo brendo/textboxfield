@@ -537,6 +537,8 @@
 		}
 
 		public function appendFormattedElement(&$wrapper, $data, $encode = false, $mode = null) {
+			if(is_null($data['value'])) return;
+
 			if ($mode == 'unformatted') {
 				$value = trim($data['value']);
 			}
